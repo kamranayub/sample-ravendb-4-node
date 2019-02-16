@@ -1,10 +1,13 @@
 const express = require("express");
+const cors = require("cors")
 const { DocumentStore } = require("ravendb");
 
 const store = new DocumentStore("http://live-test.ravendb.net", "Demo");
 store.initialize();
 
 const app = express();
+
+app.use(cors())
 
 app.use("/company/:id", async (req, res) => {
   const session = store.openSession();
@@ -26,6 +29,6 @@ app.use("/company/:id", async (req, res) => {
   }
 });
 
-app.listen(process.env.PORT || 1337, () => {
-  console.log(`Listening on port ${app.get("port")}...`);
+const http = app.listen(process.env.PORT || 1337, () => {
+  console.log(`Listening on port ${http.address().port}...`);
 });
